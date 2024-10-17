@@ -22,7 +22,7 @@ const ProductReviewCard = () => {
 
             </div>
             <Rating value={4.5} name="half-rating" readOnly precision={.5}></Rating>
-            <p className="font opacity-70">This product isd very nice i love this product </p>
+            <p className="font opacity-70">This product is very nice i love this product </p>
         </Grid>
       </Grid>
     </div>

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { Radio, RadioGroup } from "@headlessui/react";
-import Rating from '@mui/material/Rating';
-import { Grid } from "@mui/material";
+import Rating from "@mui/material/Rating";
+import { Box, Grid, LinearProgress } from "@mui/material";
 import ProductReviewCard from "./ProductReviewCard";
-
+import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
+import { mens_kurta } from "../../../Data/Mens_kurta";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -16,20 +17,20 @@ const product = {
   ],
   images: [
     {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
-      alt: "Two each of gray, white, and black shirts laying flat.",
+      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
+      alt: 'Two each of gray, white, and black shirts laying flat.',
     },
     {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg",
-      alt: "Model wearing plain black basic tee.",
+      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
+      alt: 'Model wearing plain black basic tee.',
     },
     {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg",
-      alt: "Model wearing plain gray basic tee.",
+      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
+      alt: 'Model wearing plain gray basic tee.',
     },
     {
-      src: "https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg",
-      alt: "Model wearing plain white basic tee.",
+      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
+      alt: 'Model wearing plain white basic tee.',
     },
   ],
   colors: [
@@ -146,25 +147,19 @@ export default function ProductDetails() {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
-
-              <p className="font-semibold">
-                $199
-              </p>
-              <p className="opacity-50 line-through">
-                $211
-              </p>
-              <p className="text-green-600 font-semibold">
-                5 % off
-              </p>
+                <p className="font-semibold">$199</p>
+                <p className="opacity-50 line-through">$211</p>
+                <p className="text-green-600 font-semibold">5 % off</p>
               </div>
 
               {/* Reviews */}
               <div className="mt-6">
                 <div className="flex items-center space-x-3">
-
-              <Rating name="read-only" value={4.5} readOnly />
-              <p className="opacity-50 text-sm">62655 Ratings</p>
-              <p className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">35 Reviews</p>
+                  <Rating name="read-only" value={4.5} readOnly />
+                  <p className="opacity-50 text-sm">62655 Ratings</p>
+                  <p className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    35 Reviews
+                  </p>
                 </div>
               </div>
 
@@ -269,7 +264,7 @@ export default function ProductDetails() {
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  Add to bag
+                  Add to Cart
                 </button>
               </form>
             </div>
@@ -314,16 +309,111 @@ export default function ProductDetails() {
         </section>
         {/* rating and reviews */}
         <section>
-            <h1>Recent Review & Rating</h1>
-            <div className="border p-5">
-                <Grid container spacing={7}>
-                    <Grid item xs={7}>
-                        <div className="space-y-5">
-                             <ProductReviewCard/>
-                        </div>
+          <h1 className="font-semibold text-lg pb-4">Recent Review & Rating</h1>
+          <div className="border p-5">
+            <Grid container spacing={7}>
+              <Grid item xs={7}>
+                <div className="space-y-5">
+                  {[1, 1, 1, 1].map((item) => (
+                    <ProductReviewCard key={item} />
+                  ))}
+                </div>
+              </Grid>
+              <Grid className="pt-3">
+                <h1 className="text-xl font-semibold pt-12">Product Ratings</h1>
+                <div className="flex items-center space-x-3">
+                  <Rating readOnly value={3.5} precision={0.5} />
+                  <p className="opacity-60">32,423 Ratings</p>
+                </div>
+
+                <Box className="mt-5 space-y-5">
+                  <Grid container alignItems="center">
+                    <Grid item xs={3}>
+                      <p className="mb-2">Awesome</p>{" "}
+                      {/* Added margin-bottom */}
                     </Grid>
-                </Grid>
-            </div>
+                    <Grid item xs={10} className="flex items-center">
+                      <LinearProgress
+                        sx={{
+                          bgcolor: "#d0d0d0",
+                          borderRadius: 4,
+                          height: 7,
+                          flexGrow: 1, // Allow the progress bar to grow
+                        }}
+                        variant="determinate"
+                        value={40}
+                        color="success"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container alignItems="center">
+                    <Grid item xs={3}>
+                      <p className="mb-2">Excellent</p>{" "}
+                      {/* Added margin-bottom */}
+                    </Grid>
+                    <Grid item xs={10} className="flex items-center">
+                      <LinearProgress
+                        sx={{
+                          bgcolor: "#d0d0d0",
+                          borderRadius: 4,
+                          height: 7,
+                          flexGrow: 1, // Allow the progress bar to grow
+                        }}
+                        variant="determinate"
+                        value={60}
+                        color="secondary"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container alignItems="center">
+                    <Grid item xs={3}>
+                      <p className="mb-2">Good</p>{" "}
+                      {/* Added margin-bottom */}
+                    </Grid>
+                    <Grid item xs={10} className="flex items-center">
+                      <LinearProgress
+                        sx={{
+                          bgcolor: "#d0d0d0",
+                          borderRadius: 4,
+                          height: 7,
+                          flexGrow: 1, // Allow the progress bar to grow
+                        }}
+                        variant="determinate"
+                        value={30}
+                        color="warning"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container alignItems="center">
+                    <Grid item xs={3}>
+                      <p className="mb-2">poor</p>{" "}
+                      {/* Added margin-bottom */}
+                    </Grid>
+                    <Grid item xs={10} className="flex items-center">
+                      <LinearProgress
+                        sx={{
+                          bgcolor: "#d0d0d0",
+                          borderRadius: 4,
+                          height: 7,
+                          flexGrow: 1, // Allow the progress bar to grow
+                        }}
+                        variant="determinate"
+                        value={20}
+                        color="error"
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+            </Grid>
+          </div>
+        </section>
+        {/* similar product */}
+        <section className="pt-10">
+          <h1 className="py-5 text-xl font-bold">Similer Product</h1>
+          <div className="flex flex-wrap space-y-5">
+            {mens_kurta.map((item)=><HomeSectionCard props={item}/>)}
+          </div>
         </section>
       </div>
     </div>

@@ -17,7 +17,6 @@ const MainCarousel = () => {
 
   return (
     <AliceCarousel
-      mouseTracking
       items={items}
       controlsStrategy="alternate"
       disableButtonsControls

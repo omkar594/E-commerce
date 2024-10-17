@@ -1,4 +1,5 @@
 import React from 'react'
+import x from "../Image/EliteDeals-logo.png"
 import { Fragment, useState } from 'react'
 import {
   Dialog,
@@ -283,11 +284,11 @@ const Navigation = () => {
   
                 {/* Logo */}
                 <div className="ml-4 flex lg:ml-0">
-                  <a href="#">
+                  <a href="http://www.facebook.com">
                     <span className="sr-only">Your Company</span>
                     <img
                       alt=""
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                      src={x}
                       className="h-8 w-auto"
                     />
                   </a>

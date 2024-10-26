@@ -16,7 +16,7 @@ export default function CheckOut() {
   const querySearch = new URLSearchParams(location.search);
   const step = querySearch.get("steps");
 
-  // If "steps" query parameter is passed, set it as the initial active step, else start from 0
+ 
   const initialStep = step ? parseInt(step) : 0;
   const [activeStep, setActiveStep] = React.useState(initialStep);
 
@@ -50,7 +50,7 @@ export default function CheckOut() {
         ) : (
           <React.Fragment>
             {/* Render content based on the current step */}
-            <Box sx={{ mt: 2 }}>
+            <Box className='mt-10' sx={{ mt: 2 }}>
               {activeStep === 1 && <DeliverAddressForm />}
               {activeStep === 2 && <OrderSummery />}
               {/* Placeholder for other steps */}

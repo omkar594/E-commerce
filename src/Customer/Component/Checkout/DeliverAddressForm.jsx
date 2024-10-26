@@ -9,6 +9,17 @@ const DeliverAddressForm = () => {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
 
+        const address ={
+          firstName:data.get('firstName'),
+          lastName:data.get('lastName'),
+          streetAddress:data.get('address'),
+          city:data.get('city'),
+          state:data.get('state'),
+          zip:data.get('zip'),
+          mobile:data.get('phoneNumber')
+
+        };
+
         console.log("address",data)
     }
   return (

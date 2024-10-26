@@ -5,7 +5,7 @@ import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 
 const HomeSectionCarousel = ({ Data, Section }) => {
   const carouselRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0); // Start from the first item
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const responsive = {
     0: { items: 1 },
@@ -34,8 +34,13 @@ const HomeSectionCarousel = ({ Data, Section }) => {
 
   return (
     <div className="shadow-lg bg-white rounded-lg overflow-hidden">
-      <div className="relative p-5">
-        <h2 className="text-xl font-bold mb-4">{Section}</h2> {/* Updated class name for proper sizing */}
+      <div className="relative p-8">
+        {/* Section Title */}
+        <h2 className="text-2xl font-serif font-semibold text-gray-800 mb-6 text-center">
+          {Section}
+        </h2>
+
+        {/* Carousel */}
         <AliceCarousel
           mouseTracking
           ref={carouselRef}
@@ -45,25 +50,25 @@ const HomeSectionCarousel = ({ Data, Section }) => {
           infinite
           disableDotsControls
           activeIndex={activeIndex}
-          onSlideChanged={({ item }) => setActiveIndex(item)} // Update index when slide changes
+          onSlideChanged={({ item }) => setActiveIndex(item)}
         />
 
-        {/* Show next button if not at the last item */}
+        {/* Next Button */}
         {activeIndex < items.length - 1 && (
           <button
-            className="absolute top-1/2 right-4 transform -translate-y-1/2  bg-black text-white  p-2"
-            aria-label="next"
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300"
+            aria-label="Next"
             onClick={slideNext}
           >
             <ArrowLeftIcon style={{ transform: "rotate(180deg)" }} />
           </button>
         )}
 
-        {/* Show previous button if not at the first item */}
+        {/* Previous Button */}
         {activeIndex > 0 && (
           <button
-            className="absolute top-1/2 left-4 transform -translate-y-1/2  bg-black text-white p-2"
-            aria-label="previous"
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300"
+            aria-label="Previous"
             onClick={slidePrev}
           >
             <ArrowLeftIcon style={{ transform: "rotate(0deg)" }} />

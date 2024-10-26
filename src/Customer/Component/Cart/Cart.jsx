@@ -1,9 +1,14 @@
 import React from "react";
 import CartItems from "./CartItems";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
+  const handleNavigate =()=>{
+    navigate('/checkout?step=2');
+  }
   return (
-    <div>
+    <div onClick={()=>handleNavigate()}>
       <div className="lg:grid grid-cols-3 lg:px-16 relative mt-4">
         <div className="col-span-2">
           {[1,1,1,1,].map((items)=><CartItems />)}

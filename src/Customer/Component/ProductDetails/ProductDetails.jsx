@@ -39,7 +39,7 @@ const product = {
     { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
     { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
   ],
-  sizes: [
+  sizes: [ 
     { name: "XXS", inStock: false },
     { name: "XS", inStock: true },
     { name: "S", inStock: true },
@@ -69,9 +69,11 @@ function classNames(...classes) {
 export default function ProductDetails() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+
   const navigate=useNavigate();
+
   const handleAddToCart =()=>{
-    navigate('/cart')
+    navigate("/cart")
   }
   return (
     <div className="bg-white">

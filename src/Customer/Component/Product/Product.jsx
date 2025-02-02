@@ -48,7 +48,7 @@ export default function Product() {
     const searchParamms = new URLSearchParams(location.search);
     let filterValues = searchParamms.getAll(sectionId);
     if (filterValues.length > 0 && filterValues[0].split(",").includes(value)) {
-      filterValues = filterValues[0].split(",").filter((item) => item != value);
+      filterValues = filterValues[0].split(",").filter((item) => item !== value);
 
       if (filterValues.length === 0) {
         searchParamms.delete(sectionId);

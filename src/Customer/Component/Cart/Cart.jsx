@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const navigate = useNavigate();
   const handleNavigate =()=>{
-    navigate('/checkout?step=2');
+    navigate('/checkout?steps=1');
   }
   return (
     <div onClick={()=>handleNavigate()}>
@@ -38,7 +38,7 @@ const Cart = () => {
             </div>
           </div>
         <button
-          type="submit"
+          onClick={handleNavigate}
           className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Check Out

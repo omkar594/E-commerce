@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Router, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navigation from "../Customer/Component/Navigation/Navigation";
 import Footer from "../Customer/Component/Footer/Footer";
 import HomePage from "../Customer/Pages/HomePage/HomePage";
@@ -7,7 +7,7 @@ import Product from "../Customer/Component/Product/Product";
 import ProductDetails from "../Customer/Component/ProductDetails/ProductDetails";
 import Cart from "../Customer/Component/Cart/Cart";
 import CheckOut from '../Customer/Component/Checkout/CheckOut';
-import { OrderDetails } from "../Customer/Component/Order/OrderDetails";
+import { OrderDetails } from "../Customer/Component/Order/OrderDetails.jsx";
 import Order  from "../Customer/Component/Order/Order.jsx";
 
 const CustomerRouter = () => {
@@ -18,9 +18,13 @@ const CustomerRouter = () => {
       </div>
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
+        <Route path="/login" element={<HomePage />}></Route>
+
+        <Route path="/register" element={<HomePage />}></Route>
+
         <Route path="cart" element={<Cart/>}></Route>
         <Route
-          path="/:category/:section/:item"
+          path="/:categories/:sections/:items"
           element={<Product/>}
         ></Route>
         <Route path="/Product/:ProductId" element={<ProductDetails />}></Route>

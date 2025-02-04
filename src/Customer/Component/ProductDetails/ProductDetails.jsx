@@ -5,7 +5,7 @@ import Rating from "@mui/material/Rating";
 import { Box, Grid, LinearProgress } from "@mui/material";
 import ProductReviewCard from "./ProductReviewCard";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
-import { mens_kurta } from "../../../Data/Mens_kurta";
+import { mens_kurtas } from "../../../Data/Mens_kurtas";
 import { useNavigate } from "react-router-dom";
 
 const product = {
@@ -418,7 +418,7 @@ export default function ProductDetails() {
         <section className="pt-10">
           <h1 className="py-5 text-xl font-bold">Similer Product</h1>
           <div className="flex flex-wrap space-y-5">
-            {mens_kurta.map((item)=><HomeSectionCard props={item}/>)}
+            {mens_kurtas.map((item)=><HomeSectionCard props={item}/>)}
           </div>
         </section>
       </div>

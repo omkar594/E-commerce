@@ -25,7 +25,10 @@ import {
 import { NavigationData } from "./NavigationData";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile } from "../../../State/Auth/Action";
+import { getUserProfile, logout } from "../../../State/Auth/Action";
+import { Avatar, Menu, MenuItem } from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
+// import AuthRegister from "../../Auth/AuthRegister";
 
 const navigation = {
   categories: [
@@ -164,18 +167,29 @@ const Navigation = () => {
   const navigate = useNavigate();
 
   const [open_authModel, setopen_authModel] = useState(false);
+  const [open_authcreate,setopen_authcreate] = useState(false);
   const [anchore1, setanchore1] = useState(0);
   const openUserMenu = Boolean(anchore1);
   const jwt = localStorage.getItem("jwt");
   const location = useLocation();
 
+  const handleUserClick = (event) => {
+    setanchore1(event.currentTarget);
+  };
+  const handleCloseUserMenu = (event) => {
+    setanchore1(null);
+  };
   const handleOpen = () => {
     setopen_authModel(true);
   };
 
+  const handleOpenCreate= ()=>{
+    setopen_authcreate(true);
+  }
+  
+
   const handleClose = () => {
     setopen_authModel(false);
-    
   };
 
   const handleCategoryClick = (category, section, item, close) => {
@@ -193,10 +207,16 @@ const Navigation = () => {
     if (auth.user) {
       handleClose();
     }
-    if(location.pathname=="/login" || location.pathname=="/register") {
+    if (location.pathname === "/login" || location.pathname === "/register") {
       navigate(-1);
     }
   }, [auth.user]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    handleCloseUserMenu();
+  };
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -489,22 +509,65 @@ const Navigation = () => {
               </PopoverGroup>
 
               <div className="ml-auto flex items-center">
-                {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                    onClick={handleOpen}
-                  >
-                    Sign in
-                  </a>
-                  <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Create account
-                  </a>
-                </div> */}
+                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                  {auth.user?.firstName ? (
+                    <div>
+                      <Avatar
+                        className="text-white"
+                        onClick={handleUserClick}
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        sx={{
+                          bgcolor: deepPurple[500],
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {auth.user?.firstName[0].toUpperCase()}
+                      </Avatar>
+
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchore1}
+                        open={openUserMenu}
+                        onClose={handleCloseUserMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          profile
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/account/order")}>
+                          My Orders
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <div>
+                      <a
+                        href="#"
+                        className="text-sm font-medium text-gray-700 hover:text-gray-800 m-3"
+                        onClick={handleOpen}
+                      >
+                        Sign in
+                      </a>
+                      {/* <span
+                        aria-hidden="true"
+                        className="h-6 w-px bg-gray-200 "
+                      />|
+                      <a
+                        href="#"
+                        className="text-sm font-medium text-gray-700 hover:text-gray-800 m-3"
+                        // onClick={handleOpenCreate}
+                      >
+                        Create account
+                      </a> */}
+                    </div>
+                  )}
+                </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
                   <a
@@ -545,6 +608,7 @@ const Navigation = () => {
         </nav>
       </header>
       <AuthModel handleClose={handleClose} open={open_authModel} />
+      {/* <AuthRegister handleClose={handleClose} open={open_authcreate}/> */}
     </div>
   );
 };

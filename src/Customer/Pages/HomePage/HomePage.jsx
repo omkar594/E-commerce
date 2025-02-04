@@ -1,7 +1,7 @@
 import React from "react";
 import MainCarousel from "../../Component/HomeCarousel/MainCarousel";
 import HomeSectionCarousel from "../../Component/HomeSectionCarousel/HomeSectionCarousel";
-import { mens_kurta } from "../../../Data/Mens_kurta";
+import { mens_kurtas } from "../../../Data/Mens_kurtas";
 
 const HomePage = () => {
 
@@ -30,7 +30,7 @@ const HomePage = () => {
 
             {/* Product Section */}
             <div>
-              <HomeSectionCarousel Data={mens_kurta} Section={Sections[index]} />
+              <HomeSectionCarousel Data={mens_kurtas} Section={Sections[index]} />
             </div>
           </div>
         ))}

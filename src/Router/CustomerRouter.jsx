@@ -24,12 +24,14 @@ const CustomerRouter = () => {
 
         <Route path="cart" element={<Cart/>}></Route>
         <Route
-          path="/:categories/:sections/:items"
+          path="/:levelOne/:levelTwo/:levelThree"
           element={<Product/>}
         ></Route>
-        <Route path="/Product/:ProductId" element={<ProductDetails />}></Route>
-        <Route path='checkout' element={<CheckOut/>}></Route>
-        <Route path='order' element={<Order/>}></Route>
+        <Route path="/product/:productId" element={<ProductDetails />}></Route>
+        <Route path='/checkout' element={<CheckOut/>}></Route>
+        <Route path='/account/order' element={<Order/>}></Route>
+        <Route path='/account/order/:orderId' element={<OrderDetails/>}></Route>
+
       </Routes>
       <div>
         <Footer />

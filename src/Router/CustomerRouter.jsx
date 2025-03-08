@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import Navigation from "../Customer/Component/Navigation/Navigation";
 import Footer from "../Customer/Component/Footer/Footer";
 import HomePage from "../Customer/Pages/HomePage/HomePage";
@@ -9,8 +9,10 @@ import Cart from "../Customer/Component/Cart/Cart";
 import CheckOut from '../Customer/Component/Checkout/CheckOut';
 import { OrderDetails } from "../Customer/Component/Order/OrderDetails.jsx";
 import Order  from "../Customer/Component/Order/Order.jsx";
+import PaymentSuccess from "../Customer/Component/Payment/PaymentSuccess.js";
 
 const CustomerRouter = () => {
+  const param=useParams();
   return (
     <>
       <div>
@@ -22,15 +24,16 @@ const CustomerRouter = () => {
 
         <Route path="/register" element={<HomePage />}></Route>
 
-        <Route path="cart" element={<Cart/>}></Route>
+        <Route path="/cart" element={<Cart/>}></Route>
         <Route
           path="/:levelOne/:levelTwo/:levelThree"
-          element={<Product/>}
+          element={<Product key={param.levelThree}/>}
         ></Route>
         <Route path="/product/:productId" element={<ProductDetails />}></Route>
         <Route path='/checkout' element={<CheckOut/>}></Route>
         <Route path='/account/order' element={<Order/>}></Route>
         <Route path='/account/order/:orderId' element={<OrderDetails/>}></Route>
+        <Route path='/payment/:orderId' element={<PaymentSuccess/>}></Route>
 
       </Routes>
       <div>

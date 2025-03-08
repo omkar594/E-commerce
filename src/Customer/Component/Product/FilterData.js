@@ -16,13 +16,14 @@ export const filters = [
     id: "color",
     name: "COLOR",
     options: [
-      { value: "White", label: "White" },
-      { value: "beige", label: "Beige" },
-      { value: "blue", label: "Blue" },
-      { value: "brown", label: "Brown" },
+      { value: "white", label: "White" },
+      { value: "black", label: "Black" },
+      { value: "red", label: "Red" },
+      { value: "marun", label: "Marun" },
+      { value: "being", label: "Being" },
+      { value: "pink", label: "Pink" },
       { value: "green", label: "Green" },
-      { value: "purple", label: "Purple" },
-      { value: "yellow", label: "Yellow" },
+      { value: "yellow", label: "Yellow" }
     ],
   },
   {
@@ -58,10 +59,7 @@ export const singleFilter=[
         id:"discount",
         name:"DISCOUNT RANGE ",
         options:[
-            {
-                value:"10",
-                label:"10% AND ABOVE"
-            },
+            {value:"10",label:"10% AND ABOVE"},
             {value:"20",label:"20% AND ABOVE"},
             {value:"30",label:"30% AND ABOVE"},
             {value:"40",label:"40% AND ABOVE"},

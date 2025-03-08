@@ -2,8 +2,16 @@ import { Button } from "@headlessui/react";
 import { Box, ButtonBase, Grid, TextField } from "@mui/material";
 import React from "react";
 import AddressCard from "../AddressCard/AddressCard.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createOrder } from "../../../State/Order/Action.js";
 
 const DeliverAddressForm = () => {
+  const navigate=useNavigate();
+  const dispatch = useDispatch();
+  const {auth} = useSelector(store=>store) 
+
+
     const handleSubmit=(e)=>{
         console.log("Address is submitted")
         e.preventDefault();
@@ -21,6 +29,8 @@ const DeliverAddressForm = () => {
         };
 
         console.log("address",data)
+        const orderData={address,navigate}
+        dispatch(createOrder(orderData))
     }
   return (
     <div className="mt-10">
@@ -31,11 +41,12 @@ const DeliverAddressForm = () => {
           className="border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll"
         >
           <div className="p-5 py-7 border-b cursor-pointer">
-            <AddressCard />
+            {auth.user?.address.map((item)=><AddressCard address={item}/>)}
             <Button
               className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-8 py-3 text-base font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               variant="contained"
               fullWidth
+              
             >
               Deliver Here
             </Button>
@@ -125,6 +136,7 @@ const DeliverAddressForm = () => {
                   <button
                     type="submit"
                     className="mt-10 flex items-center justify-center rounded-md border border-transparent bg-red-600 px-8 py-3 text-base font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    // onClick={()=>handleSubmit()}
                   >
                     Deliver Here
                   </button>

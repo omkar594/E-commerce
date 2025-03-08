@@ -14,8 +14,10 @@ export const createOrder = (reqData) => async (dispatch) => {
 
   try {
     const { data } = await api.post("api/orders/", reqData.address);
-    if (data.id) {
-      reqData.navigate({ search: `step=3&order_id=${data.id}` });
+    console.log("CREATEORDER",data)
+    if (data._id) {
+      console.log('NAVIGATE OVER HERE',reqData.navigate)
+      reqData.navigate({ search: `step=2&order_id=${data._id}` });
     }
     dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
   } catch (e) {

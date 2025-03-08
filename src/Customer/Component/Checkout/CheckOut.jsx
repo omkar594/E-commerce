@@ -9,20 +9,17 @@ import { useLocation } from "react-router-dom";
 import DeliverAddressForm from "./DeliverAddressForm";
 import OrderSummery from "./OrderSummery";
 
-const steps = ["Login", "Add Delivery Address", "Order Summary", "Payment"];
 
 export default function CheckOut() {
+  const steps = ["Login", "Add Delivery Address", "Order Summary", "Payment"];
   const location = useLocation();
   const querySearch = new URLSearchParams(location.search);
   const step = querySearch.get("steps");
+  console.log("VALUE OF STEP ", step);
 
  
-  const initialStep = step ? parseInt(step) : 0;
-  const [activeStep, setActiveStep] = React.useState(initialStep);
+  const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -32,12 +29,16 @@ export default function CheckOut() {
     <div className="px-10 lg:px-20 mt-10">
       <Box sx={{ width: "100%" }}>
         {/* Stepper Component */}
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
+        <Stepper activeStep={2}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
         </Stepper>
 
         {/* Conditional Rendering of Components based on Step */}
@@ -49,16 +50,6 @@ export default function CheckOut() {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {/* Render content based on the current step */}
-            <Box className='mt-10' sx={{ mt: 2 }}>
-              {activeStep === 1 && <DeliverAddressForm />}
-              {activeStep === 2 && <OrderSummery />}
-              {/* Placeholder for other steps */}
-              {activeStep !== 1 && activeStep !== 2 && (
-                <Typography>Step {activeStep + 1} Content</Typography>
-              )}
-            </Box>
-
             {/* Navigation Buttons */}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
@@ -69,11 +60,9 @@ export default function CheckOut() {
               >
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
             </Box>
+
+            <div>{step == 2 ? <DeliverAddressForm /> : <OrderSummery />}</div>
           </React.Fragment>
         )}
       </Box>

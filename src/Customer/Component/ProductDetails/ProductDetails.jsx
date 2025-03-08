@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { Radio, RadioGroup } from "@headlessui/react";
 import Rating from "@mui/material/Rating";
@@ -6,7 +6,10 @@ import { Box, Grid, LinearProgress } from "@mui/material";
 import ProductReviewCard from "./ProductReviewCard";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import { mens_kurtas } from "../../../Data/Mens_kurtas";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { findProductsById } from "../../../State/Product/Action";
+import { addItemToCart } from "../../../State/Cart/Action";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -68,13 +71,29 @@ function classNames(...classes) {
 
 export default function ProductDetails() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-
+  const [selectedSize, setSelectedSize] = useState(" ");
+  const [price, setPrice] = useState("");
+  const params = useParams();
   const navigate=useNavigate();
-
+  const dispatch=useDispatch();
+  const {products}=useSelector((store)=>store)
   const handleAddToCart =()=>{
+    const data={productId:params.productId,size:selectedSize.name}
+    dispatch(addItemToCart(data))
     navigate("/cart")
   }
+  const handleButtonClick = (event) => {
+    event.preventDefault();
+    console.log("Entered Price:", price);
+
+    alert(`Your price of ₹${price} has been submitted!`)
+  };
+  console.log("$$$$PRODUCTID$$$$$$$$",params.productId)
+  useEffect(()=>{
+    const data = {productId:params.productId}
+
+    dispatch(findProductsById(data))
+  },[params.productId])
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -121,8 +140,8 @@ export default function ProductDetails() {
           <div className="flex flex-col items-center">
             <div className="overflow-hidden rounded-lg max-w-[30rem] max-h[35rem]">
               <img
-                alt={product.images[0].alt}
-                src={product.images[0].src}
+                alt={products.product?.imageUrl}
+                src={products.product?.imageUrl}
                 className="h-full w-full object-cover object-center"
               />
             </div>
@@ -142,10 +161,10 @@ export default function ProductDetails() {
           <div className="lg:col-span-1 maxt-auto max-w-2x1 px-4 pb-16 sm:px-6 lg:max-w-7x1 lg:px-8 lg:pb-24">
             <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
               <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                {product.name}
+                {products.product?.brand}
               </h1>
               <h1 className="text-lg lg:text-xl text-gray-900 opacity-60 pt-1">
-                Universal out fit
+              {products.product?.title}
               </h1>
             </div>
 
@@ -153,9 +172,9 @@ export default function ProductDetails() {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
-                <p className="font-semibold">$199</p>
-                <p className="opacity-50 line-through">$211</p>
-                <p className="text-green-600 font-semibold">5 % off</p>
+                <p className="font-semibold">₹ {products.product?.discountedPrice}</p>
+                <p className="opacity-50 line-through">₹ {products.product?.price}</p>
+                <p className="text-green-600 font-semibold">{products.product?.discountedPercent} % off</p>
               </div>
 
               {/* Reviews */}
@@ -265,6 +284,24 @@ export default function ProductDetails() {
                     </RadioGroup>
                   </fieldset>
                 </div>
+                 {/* Price Input */}
+                 <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      placeholder="Enter Price"
+                      className="w-full mt-2 mb-2 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      min="0"
+                      step="0.01"
+                    />
+
+                    {/* Submit Button */}
+                    <button onClick={handleButtonClick}
+                      className="w-40 p-2 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      Place Your Bid
+                    </button>
+
 
                 <button
                   onClick={()=>handleAddToCart()}

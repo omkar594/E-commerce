@@ -15,7 +15,7 @@ const initialState = {
   loading:false,
 };
 
-export const orderReducer = (state = initialState, action) => {
+export const  orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_ORDER_REQUEST:
       return { ...state,loading: true,error:null };

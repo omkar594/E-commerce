@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CartItems from "./CartItems";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../../../State/Cart/Action";
+ 
 
 const Cart = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { cart } = useSelector((store)=>store);
+  console.log("This is the cart wala ",cart)
+
   const handleNavigate =()=>{
-    navigate('/checkout?steps=1');
+    navigate('/checkout?steps=2');
   }
+
+  useEffect(()=>{
+    dispatch(getCart());
+  },[cart.updateCartItems,cart.deleteCartItems])
   return (
-    <div onClick={()=>handleNavigate()}>
+    // onClick={()=>handleNavigate()}
+    <div >
       <div className="lg:grid grid-cols-3 lg:px-16 relative mt-4">
         <div className="col-span-2">
-          {[1,1,1,1,].map((items)=><CartItems />)}
+          {cart.cart?.cartItems.map((items)=><CartItems items={items} />)}
           
         </div>
         <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
@@ -21,11 +33,11 @@ const Cart = () => {
             <div className="space-y-3 font-semibold">
               <div className="flex justify-between pt-3  text-black">
                 <span>Price</span>
-                <span>$6528</span>
+                <span>₹ {cart.cart?.totalPrice}</span>
               </div>
               <div className="flex justify-between pt-3  ">
                 <span>Discount</span>
-                <span className="text-green-600">-$528</span>
+                <span className="text-green-600">-₹ {cart.cart?.discount}</span>
               </div>
               <div className="flex justify-between pt-3  ">
                 <span>Delivery</span>
@@ -33,12 +45,12 @@ const Cart = () => {
               </div>
               <div className="flex justify-between pt-3   font-bold">
                 <span>Total Amount</span>
-                <span className="text-green-600">$6000</span>
+                <span className="text-green-600">₹ {cart.cart?.totalPrice}</span>
               </div>
             </div>
           </div>
         <button
-          onClick={handleNavigate}
+          onClick={()=>handleNavigate()}
           className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Check Out

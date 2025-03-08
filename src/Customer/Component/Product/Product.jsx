@@ -23,13 +23,12 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import ProductCart from "./ProductCart";
-import { mens_kurtas } from "../../../Data/Mens_kurtas";
+
 import { filters, singleFilter } from "./FilterData";
 import SortIcon from "@mui/icons-material/Sort";
 import { findproducts } from "../../../State/Product/Action";
 import { useDispatch, useSelector } from "react-redux";
 import { Pagination } from "@mui/material";
-import store from "../../../State/store"
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -45,35 +44,49 @@ function classNames(...classes) {
 
 export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  // const { levelOne, levelTwo, levelThree } = useParams();
+  // const [products, setProducts] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
   const param = useParams();
-  const {product}=useSelector(store=>store)
+  const { products } = useSelector((store) => store);
+  const getPageCount = useSelector((store) => store.products);
+  console.log("Total pages", getPageCount.products?.totalPages);
 
   const decodedQueryString = decodeURIComponent(location.search);
   const searchParamms = new URLSearchParams(decodedQueryString);
 
-  const colorValue = searchParamms.get("color")
-  const sizeValue = searchParamms.get("size")
-  const priceValue = searchParamms.get("price")
-  const discount = searchParamms.get("discount")
-  const sortValue = searchParamms.get("sort")
-  const pageNumber = searchParamms.get("pageNUmber")||1;
+  const colorValue = searchParamms.get("color");
+  const sizeValue = searchParamms.get("size");
+  const priceValue = searchParamms.get("price");
+  const discount = searchParamms.get("discount");
+  const sortValue = searchParamms.get("sort");
+  const pageNumber = searchParamms.get("page") || 1;
   const stock = searchParamms.get("stock");
   const dispatch = useDispatch();
 
-const handlePaginationChange=(value)=>{
-  const searchParamms = new URLSearchParams(location.search)
-  searchParamms.set("page", value);
-  const query=searchParamms.toString();
-  navigate({search:`?${query}`})
-}
+  const handlePaginationChange = (event, value) => {
+    // console.log("This is the page value ",value);
+    const searchParamms = new URLSearchParams(location.search);
+    searchParamms.set("page", value);
+    const query = searchParamms.toString();
+    navigate({ search: `${query}` });
+
+    // Manually dispatch API call after navigation
+    // dispatch(findproducts({ ...reqData, pageNumber: value }));
+  };
 
   const handleFilter = (value, sectionId) => {
     const searchParamms = new URLSearchParams(location.search);
+    console.log("searchParamms", searchParamms);
+
     let filterValues = searchParamms.getAll(sectionId);
+    console.log("This is the filterValue", filterValues);
+
     if (filterValues.length > 0 && filterValues[0].split(",").includes(value)) {
-      filterValues = filterValues[0].split(",").filter((item) => item !== value);
+      filterValues = filterValues[0]
+        .split(",")
+        .filter((item) => item !== value);
 
       if (filterValues.length === 0) {
         searchParamms.delete(sectionId);
@@ -97,26 +110,52 @@ const handlePaginationChange=(value)=>{
     navigate({ search: `?${query}` });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
+    console.log("Fetching products with filters...");
+    console.log("Route Params:", param);
+    console.log("Category:", param.levelThree);
+    console.log("Current URL Search Params:", location.search);
 
-    const [minPrice,maxPrice]=priceValue === null ?[0,0] : priceValue.split("-").map(Number);
+    console.log("Filters:", {
+      colorValue,
+      sizeValue,
+      priceValue,
+      discount,
+      sortValue,
+      pageNumber,
+      stock,
+    });
+    const [minPrice, maxPrice] =
+      priceValue === null ? [0, 100000] : priceValue.split("-").map(Number);
+    const category = param.levelThree;
+    console.log("************", category);
 
-    const data={
-      category:param.levelThree,
-      colors:colorValue||[],
-      size:sizeValue||[],
-      minPrice:minPrice||0,
-      maxPrice:maxPrice,
-      minDiscount:discount ||0,
-      sort:sortValue||'price_low',
-      pageNumber:pageNumber-1,
-      pageSize:10,
-      stock:stock
-    }
-    dispatch(findproducts(data))
-  },[param.levelThree,
-    colorValue,sizeValue,priceValue,discount,sortValue,pageNumber,stock
-  ]) 
+    const data = {
+      category: param.levelThree,
+      colors: colorValue || [],
+      size: sizeValue || [],
+      minPrice,
+      maxPrice,
+      minDiscount: discount || 0,
+      sort: sortValue || "price_low",
+      pageNumber: pageNumber,
+      pageSize: 10,
+      stock: stock,
+    };
+    console.log("Final API Call Data:", data);
+    dispatch(findproducts(data));
+  }, [
+    param.levelThree,
+    colorValue,
+    sizeValue,
+    priceValue,
+    discount,
+    sortValue,
+    pageNumber,
+    stock,
+    dispatch,
+    location.search,
+  ]);
 
   return (
     <div className="bg-white">
@@ -302,7 +341,7 @@ const handlePaginationChange=(value)=>{
                           <div key={option.value} className="flex items-center">
                             <input
                               onChange={() =>
-                                handleFilter(section.id, option.value)
+                                handleFilter(option.value, section.id)
                               }
                               defaultValue={option.value}
                               defaultChecked={option.checked}
@@ -355,8 +394,8 @@ const handlePaginationChange=(value)=>{
                               onChange={(e) =>
                                 handleRadioFilterChange(e, section.id)
                               }
-                              value={option.value} // Set the value for the radio button
-                              checked={option.checked} // Control the checked state
+                              defaultValue={option.value} // Set the value for the radio button
+                              defaultChecked={option.checked} // Control the checked state
                               id={`filter-${section.id}-${optionIdx}`}
                               name={section.id} // All radio buttons in this group share the same name
                               type="radio" // Change to radio type
@@ -379,17 +418,23 @@ const handlePaginationChange=(value)=>{
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <div className="flex flex-wrap justify">
-                  {product.products && product.products?.content?.map((item) => (
-                    <ProductCart product={item} />
-                  ))}
+                  {products.products &&
+                    products.products?.content?.map((item) => (
+                      <ProductCart product={item} />
+                    ))}
                 </div>
               </div>
             </div>
           </section>
           <section className="w-full px=[3.6rem]">
             <div className="px-4 py-5 flex justify-center">
-              <Pagination count={product.products?.totalPages} color="secondary" 
-              onChange={handlePaginationChange}/>
+              <Pagination
+                count={products.products?.totalPages}
+                color="secondary"
+                onChange={(event, value) =>
+                  handlePaginationChange(event, value)
+                }
+              />
             </div>
           </section>
         </main>

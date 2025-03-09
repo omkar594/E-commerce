@@ -1,36 +1,36 @@
-import React from 'react'
-import "./productCart.css"
-// import Product from './Product'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./productCart.css";
 
+const ProductCart = ({ product }) => {
+  const navigate = useNavigate();
 
-const ProductCart = ({product}) => {
-  const {title,brand,imageUrl,price,discountedPrice,discountedPercent,color}=product;
-  
-  
-  const navigate = useNavigate()
-  const handleNavigate=()=>{
-    navigate(`/product/${product._id}`)
-  }
+  const handleClick = () => {
+    navigate(`/product/${product._id}`); // Ensure this matches your route in App.js or Router setup
+  };
+
   return (
-    <div onClick={handleNavigate} className='productCard w-[15rem] m-3 transition-all cursor-pointer'>
-      <div className='h-[20rem]'>
-        <img src={imageUrl} alt='' className='h-full w-full object-cover object-left-top'/>
-      </div>
-      <div className='textPart bg-white p-2'>
-        <div className=' '>
-          <p className='font-bold opacity-70'>{brand}</p>
-          <p className=''>{title}</p>
-        </div>
-        <div className='flex items-center space-x-2'>
-          <p className='font-semibold'>₹{discountedPrice}</p>
-          <p className='line-through opacity-50'>₹{price}</p>
-          <p className='text-green-600 font-semibold'>{discountedPercent} % off</p>
-          <p className='text-black-600 font-semibold'> {color}  </p>
-        </div>
+    <div
+      className="product-card border p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition"
+      onClick={handleClick}
+    >
+      <img
+        src={product.image || "https://via.placeholder.com/150"}
+        alt={product.name}
+        className="w-full h-40 object-cover rounded-md"
+      />
+      <div className="mt-2">
+        <h2 className="text-lg font-semibold">{product.name}</h2>
+        <p className="text-gray-600">${product.price}</p>
+        <button
+          onClick={handleClick}
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          View Details
+        </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductCart
+export default ProductCart;

@@ -7,6 +7,10 @@ const HomeSectionCarousel = ({ Data, Section }) => {
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  if (!Data || Data.length === 0) {
+    return <p className="text-center text-gray-500">No products available</p>;
+  }
+
   const responsive = {
     0: { items: 1 },
     720: { items: 2 },
@@ -15,21 +19,19 @@ const HomeSectionCarousel = ({ Data, Section }) => {
   };
 
   const slidePrev = () => {
-    if (activeIndex > 0) {
-      setActiveIndex(activeIndex - 1);
-      carouselRef.current.slideTo(activeIndex - 1);
-    }
+    setActiveIndex((prev) => Math.max(prev - 1, 0));
+    carouselRef.current?.slideTo(activeIndex - 1);
   };
 
   const slideNext = () => {
-    if (activeIndex < Data.length - 1) {
-      setActiveIndex(activeIndex + 1);
-      carouselRef.current.slideTo(activeIndex + 1);
-    }
+    setActiveIndex((prev) => Math.min(prev + 1, Data.length - 1));
+    carouselRef.current?.slideTo(activeIndex + 1);
   };
 
-  const items = Data.map((item, index) => (
-    <HomeSectionCard props={item} key={index} />
+  const items = Data.map((item) => (
+    <div key={item.id}>
+      <HomeSectionCard item={item} />
+    </div>
   ));
 
   return (
@@ -50,30 +52,32 @@ const HomeSectionCarousel = ({ Data, Section }) => {
           infinite
           disableDotsControls
           activeIndex={activeIndex}
-          onSlideChanged={({ item }) => setActiveIndex(item)}
+          onSlideChanged={(e) => setActiveIndex(e.item)}
         />
 
-        {/* Next Button */}
-        {activeIndex < items.length - 1 && (
-          <button
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300"
-            aria-label="Next"
-            onClick={slideNext}
-          >
-            <ArrowLeftIcon style={{ transform: "rotate(180deg)" }} />
-          </button>
-        )}
-
         {/* Previous Button */}
-        {activeIndex > 0 && (
-          <button
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300"
-            aria-label="Previous"
-            onClick={slidePrev}
-          >
-            <ArrowLeftIcon style={{ transform: "rotate(0deg)" }} />
-          </button>
-        )}
+        <button
+          className={`absolute top-1/2 left-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300 ${
+            activeIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          aria-label="Previous"
+          onClick={slidePrev}
+          disabled={activeIndex === 0}
+        >
+          <ArrowLeftIcon />
+        </button>
+
+        {/* Next Button */}
+        <button
+          className={`absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white p-3 rounded-full hover:bg-gray-800 transition-all duration-300 ${
+            activeIndex === Data.length - 1 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          aria-label="Next"
+          onClick={slideNext}
+          disabled={activeIndex === Data.length - 1}
+        >
+          <ArrowLeftIcon style={{ transform: "rotate(180deg)" }} />
+        </button>
       </div>
     </div>
   );

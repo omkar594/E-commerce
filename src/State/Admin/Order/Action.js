@@ -1,4 +1,4 @@
-import { api } from "../../../../../../../Config/apiConfig";
+import { api } from "../../../Config/apiConfig";
 import {
   CONFIRMED_ORDER_FAILURE,
   CONFIRMED_ORDER_REQUEST,
@@ -18,9 +18,9 @@ import {
 } from "./ActionType";
 
 export const getOrders = (reqData) => {
-  console.log("get all orders ");
+  console.log("get all orders ",reqData);
   return async (dispatch) => {
-    dispatch({ type: GET_ORDERS_REQUEST });
+    dispatch({ type: GET_ORDERS_REQUEST});
     try {
       const response = await api.get(`/api/admin/orders/`);
       console.log("get all orders ", response.data);
@@ -72,8 +72,10 @@ export const deleteOrder = (orderId) => {
   return async (dispatch) => {
     dispatch({ type: DELETE_ORDER_REQUEST });
     try {
+      console.log(`Sending DELETE request to: /api/admin/orders/${orderId}/delete`);
+
+      console.log("delete order ", orderId);
       const { data } = await api.delete(`/api/admin/orders/${orderId}/delete`);
-      console.log("delete order ", data);
       dispatch({ type: DELETE_ORDER_SUCCESS, payload: data });
     } catch (error) {
       console.log("catch error ", error);

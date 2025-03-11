@@ -21,7 +21,8 @@ const Achivement = () => {
         <Typography varient="h6" sx={{ letterSpacing: ".25px" }}>
           EliteDeals
         </Typography>
-        <Typography>Congratulations </Typography>
+        <Typography varient='body2'>Congratulations 😘</Typography>
+        <Typography varient='h5' sx={{my:3.1}}>420.8k</Typography>
 
         <Button size="small" variant="contained">
           View Sales

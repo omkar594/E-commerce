@@ -3,7 +3,7 @@ const Navigation = () => {
   
 
     const handleCategoryClick = (category, section, item, closeMenu) => {
-        console.log("Navigating to:", /${category.id}/${section.id}/${item.id});
+        // console.log("Navigating to:" /${category.id}/${section.id}/${item.id});
         navigate(`/${category.id}/${section.id}/${item.id}`);
         closeMenu();
     };

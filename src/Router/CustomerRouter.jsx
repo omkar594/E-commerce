@@ -25,6 +25,7 @@ const CustomerRouter = () => {
         <Route path="/register" element={<HomePage />}></Route>
 
         <Route path="/cart" element={<Cart/>}></Route>
+        <Route path="/submit-price/:productId" element={<Cart/>}></Route>
         <Route
           path="/:levelOne/:levelTwo/:levelThree"
           element={<Product key={param.levelThree}/>}

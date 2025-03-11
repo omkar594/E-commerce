@@ -6,7 +6,7 @@ export const AdminRouters = () => {
   return (
     <div>
         <Routes>
-            <Route path='/' element={<Admin/>}></Route>
+            <Route path='/*' element={<Admin/>}></Route>
         </Routes>
     </div>
   )

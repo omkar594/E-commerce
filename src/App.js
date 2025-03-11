@@ -14,7 +14,6 @@ function App() {
       <Routes>
         <Route path='/*' element={<CustomerRouter/>}></Route>
         <Route path='/admin/*' element={<AdminRouters/>}></Route>
-
       </Routes>
     </div>
   );

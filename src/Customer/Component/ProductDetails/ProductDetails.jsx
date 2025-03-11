@@ -8,8 +8,9 @@ import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import { mens_kurtas } from "../../../Data/Mens_kurtas";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { findProductsById } from "../../../State/Product/Action";
+import { findProductsById, getPrice } from "../../../State/Product/Action";
 import { addItemToCart } from "../../../State/Cart/Action";
+import { submitPriceRequest } from "../../../State/Price/Action";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -21,20 +22,20 @@ const product = {
   ],
   images: [
     {
-      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-      alt: 'Two each of gray, white, and black shirts laying flat.',
+      src: "https://tailwindui.com/plus/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
+      alt: "Two each of gray, white, and black shirts laying flat.",
     },
     {
-      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-      alt: 'Model wearing plain black basic tee.',
+      src: "https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg",
+      alt: "Model wearing plain black basic tee.",
     },
     {
-      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-      alt: 'Model wearing plain gray basic tee.',
+      src: "https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg",
+      alt: "Model wearing plain gray basic tee.",
     },
     {
-      src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-      alt: 'Model wearing plain white basic tee.',
+      src: "https://tailwindui.com/plus/img/ecommerce-images/product-page-02-featured-product-shot.jpg",
+      alt: "Model wearing plain white basic tee.",
     },
   ],
   colors: [
@@ -42,7 +43,7 @@ const product = {
     { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
     { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
   ],
-  sizes: [ 
+  sizes: [
     { name: "XXS", inStock: false },
     { name: "XS", inStock: true },
     { name: "S", inStock: true },
@@ -74,26 +75,60 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState(" ");
   const [price, setPrice] = useState("");
   const params = useParams();
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
-  const {products}=useSelector((store)=>store)
-  const handleAddToCart =()=>{
-    const data={productId:params.productId,size:selectedSize.name}
-    dispatch(addItemToCart(data))
-    navigate("/cart")
-  }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+
+  const { products } = useSelector((store) => store);
+
+  const handleAddToCart = () => {
+    const data = { productId: params.productId, size: selectedSize.name };
+    dispatch(addItemToCart(data));
+    navigate("/cart");
+  };
+
+  const [proposedPrice, setProposedPrice] = useState("");
+  const { userPriceStatus, error } = useSelector((store) => store.pendingPrices);
+  console.log("userPriceStatus",userPriceStatus)
+  console.log("Here I get this product", products);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(
+      "This the price ",
+      0.7 * products.product.discountedPrice,
+      proposedPrice
+    );
+    if (
+      proposedPrice < 0.7 * products.product.discountedPrice ||
+      proposedPrice > products.product.discountedPrice
+    ) {
+      alert(
+        "Invalid price! Must be between 70% and 100% of the original price."
+      );
+      return;
+    }
+    console.log("ok%%%%%%%%%%%%%%%%%%%");
+    dispatch(
+      submitPriceRequest(auth.user._id, products.product._id, proposedPrice)
+    );
+  };
+
   const handleButtonClick = (event) => {
     event.preventDefault();
     console.log("Entered Price:", price);
+    dispatch(getPrice(price));
 
-    alert(`Your price of ₹${price} has been submitted!`)
+    alert(`Your price of ₹${price} has been submitted!`);
   };
-  console.log("$$$$PRODUCTID$$$$$$$$",params.productId)
-  useEffect(()=>{
-    const data = {productId:params.productId}
+  console.log("$$$$PRODUCTID$$$$$$$$", params.productId);
+  useEffect(() => {
+    const data = { productId: params.productId };
 
-    dispatch(findProductsById(data))
-  },[params.productId])
+    console.log("This is the auth data", auth);
+    dispatch(findProductsById(data));
+  }, [params.productId]);
+
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -146,8 +181,11 @@ export default function ProductDetails() {
               />
             </div>
             <div className="flex flex-wrap justify-center space-x-5 ">
-              {product.images.map((item) => (
-                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
+              {product.images.map((item, index) => (
+                <div
+                  key={index}
+                  className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4"
+                >
                   <img
                     alt={item.alt}
                     src={item.src}
@@ -164,7 +202,7 @@ export default function ProductDetails() {
                 {products.product?.brand}
               </h1>
               <h1 className="text-lg lg:text-xl text-gray-900 opacity-60 pt-1">
-              {products.product?.title}
+                {products.product?.title}
               </h1>
             </div>
 
@@ -172,9 +210,15 @@ export default function ProductDetails() {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
-                <p className="font-semibold">₹ {products.product?.discountedPrice}</p>
-                <p className="opacity-50 line-through">₹ {products.product?.price}</p>
-                <p className="text-green-600 font-semibold">{products.product?.discountedPercent} % off</p>
+                <p className="font-semibold">
+                  ₹ {products.product?.discountedPrice}
+                </p>
+                <p className="opacity-50 line-through">
+                  ₹ {products.product?.price}
+                </p>
+                <p className="text-green-600 font-semibold">
+                  {products.product?.discountedPercent} % off
+                </p>
               </div>
 
               {/* Reviews */}
@@ -284,27 +328,47 @@ export default function ProductDetails() {
                     </RadioGroup>
                   </fieldset>
                 </div>
-                 {/* Price Input */}
-                 <input
-                      type="number"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      placeholder="Enter Price"
-                      className="w-full mt-2 mb-2 p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                      min="0"
-                      step="0.01"
-                    />
+                {/* Price Input */}
 
-                    {/* Submit Button */}
-                    <button onClick={handleButtonClick}
-                      className="w-40 p-2 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      Place Your Bid
-                    </button>
+                <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md mx-auto">
+                  <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                    Set Your Price
+                  </h3>
 
+                  {/* Input Field */}
+                  <input
+                    type="number"
+                    placeholder="Enter Price"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-gray-700"
+                    min="0"
+                    step="0.01"
+                    value={proposedPrice}
+                    onChange={(e) => setProposedPrice(e.target.value)}
+                  />
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={handleSubmit}
+                    className="mt-4 w-full flex items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-white font-medium text-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    Submit Price
+                  </button>
+
+                  {/* Status Messages */}
+                  <div className="mt-4 text-center">
+                    {userPriceStatus === "submitted" && (
+                      <p className="text-yellow-600 font-medium">
+                        Waiting for admin approval...
+                      </p>
+                    )}
+                    {error && (
+                      <p className="text-red-500 font-medium">{error}</p>
+                    )}
+                  </div>
+                </div>
 
                 <button
-                  onClick={()=>handleAddToCart()}
+                  onClick={() => handleAddToCart()}
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Add to Cart
@@ -410,8 +474,7 @@ export default function ProductDetails() {
                   </Grid>
                   <Grid container alignItems="center">
                     <Grid item xs={3}>
-                      <p className="mb-2">Good</p>{" "}
-                      {/* Added margin-bottom */}
+                      <p className="mb-2">Good</p> {/* Added margin-bottom */}
                     </Grid>
                     <Grid item xs={10} className="flex items-center">
                       <LinearProgress
@@ -429,8 +492,7 @@ export default function ProductDetails() {
                   </Grid>
                   <Grid container alignItems="center">
                     <Grid item xs={3}>
-                      <p className="mb-2">poor</p>{" "}
-                      {/* Added margin-bottom */}
+                      <p className="mb-2">poor</p> {/* Added margin-bottom */}
                     </Grid>
                     <Grid item xs={10} className="flex items-center">
                       <LinearProgress
@@ -455,7 +517,9 @@ export default function ProductDetails() {
         <section className="pt-10">
           <h1 className="py-5 text-xl font-bold">Similer Product</h1>
           <div className="flex flex-wrap space-y-5">
-            {mens_kurtas.map((item)=><HomeSectionCard props={item}/>)}
+            {mens_kurtas.map((item) => (
+              <HomeSectionCard props={item} />
+            ))}
           </div>
         </section>
       </div>

@@ -12,7 +12,7 @@ MenuItem,
 import {Fragment } from "react";
 // import "./CreateProductForm.css";
 import { useDispatch } from "react-redux";
-import { createProduct } from "./State/Product/Action";
+import { createProduct } from "../../State/Product/Action";
 
 const initialSizes = [
 { name: "S", quantity: 0 }, 
@@ -28,12 +28,12 @@ title: "",
 color:"",
 price:'',
 discountedPrice:'',
-discountedPersent:"",
+discountedPercent:"",
 size: initialSizes,
 quantity: "",
-topLavelCategory:"",
-secondLavelCategory:"",
-thirdLavelCategory:"",
+topLevelCategory:"",
+secondLevelCategory:"",
+thirdLevelCategory:"",
 description:"",
 });
 const dispatch=useDispatch();
@@ -142,7 +142,7 @@ console.log("I am in the page of create product")
             <TextField
               fullWidth
               label="Discounted Price"
-              name="discountedprice"
+              name="discountedPrice"
               value={productData.discountedPrice}
               onChange={handleChange}
               type="number"
@@ -152,8 +152,8 @@ console.log("I am in the page of create product")
             <TextField
               fullWidth
               label="Discounted Percentage"
-              name="discountedpersent"
-              value={productData.discountedPersent}
+              name="discountedPercent"
+              value={productData.discountedPercent}
               onChange={handleChange}
               type="number"
               />
@@ -162,12 +162,12 @@ console.log("I am in the page of create product")
             <FormControl fullWidth>
               <InputLabel>Top Level Category</InputLabel>
               <Select
-                name="topLavelCategory"
-                value={productData.topLavelCategory}
+                name="topLevelCategory"
+                value={productData.topLevelCategory}
                 onChange={handleChange}
                 label="Top Level Category"
                 >
-                  <MenuItem value="men">Men</MenuItem>
+                  <MenuItem value="Men">Men</MenuItem>
                   <MenuItem value="women">Women</MenuItem>
                   <MenuItem value="kids">Kids</MenuItem>
                 </Select>
@@ -177,12 +177,12 @@ console.log("I am in the page of create product")
             <FormControl fullWidth>
               <InputLabel>Second Level Category</InputLabel>
               <Select
-                name="secondLavelCategory"
-                value={productData.secondLavelCategory}
+                name="secondLevelCategory"
+                value={productData.secondLevelCategory}
                 onChange={handleChange}
                 label="Second Level Category"
                 >
-                  <MenuItem value="clothing">Clothing</MenuItem>
+                  <MenuItem value="Clothing">Clothing</MenuItem>
                   <MenuItem value="accessories">Accessories</MenuItem>
                   <MenuItem value="brands">Brands</MenuItem>
                 </Select>
@@ -192,12 +192,13 @@ console.log("I am in the page of create product")
             <FormControl fullWidth>
               <InputLabel>Third Level Category</InputLabel>
               <Select
-                name="thirdLavelCategory"
-                value={productData.thirdLavelCategory}
+                name="thirdLevelCategory"
+                value={productData.thirdLevelCategory}
                 onChange={handleChange}
                 label="Third Level Category"
                 >
                   <MenuItem value="top">Top</MenuItem>
+                  <MenuItem value="mens_kurta">mens kurta</MenuItem>
                   <MenuItem value="women_dress">Dresses</MenuItem>
                   <MenuItem value="t-shirt">T-shirts</MenuItem>
                   <MenuItem value="saree">Saree</MenuItem>

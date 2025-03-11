@@ -4,7 +4,8 @@ import {customerProductReducer} from "./Product/Reducer";
 import {cartReducer} from "./Cart/Reducer";
 import {orderReducer} from "./Order/Reducer";
 import paymentReducer from "./Payment/Reducer";
-import {adminOrderReducer} from "../Admin/components/State/Product/State/Admin/Order/Reducer";
+import {adminOrderReducer} from "./Admin/Order/Reducer";
+import priceReducer from "./Price/Reducer";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     order: orderReducer,
     payment:paymentReducer,
     adminOrder:adminOrderReducer,
+    pendingPrices:priceReducer
   },
 });
 

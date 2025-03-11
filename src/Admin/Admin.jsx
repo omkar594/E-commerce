@@ -28,6 +28,7 @@ import CreateProductForm from "./components/CreateProductForm";
 import ProductTable from "./components/ProductsTable";
 import OrdersTable from "./components/OrdersTable";
 import CustomersTable from "./components/CustomersTable";
+import AdminApproval from "./components/AdminApproval";
 
 const drawerWidth = 240;
 
@@ -59,28 +60,19 @@ const Admin = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height: "100%",
       }}
     >
-      <Toolbar sx={{ minHeight: "40px", height: "40px" }}>
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{ fontWeight: 600 }}
-        >
-          Admin Panel
-        </Typography>
-      </Toolbar>
-      <List sx={{ p: 0, mt: 0 }}>
+      {isLargeScreen && <Toolbar />}
+      <List>
         {menu.map((item) => (
           <ListItem
             key={item.name}
             disablePadding
             onClick={() => navigate(item.path)}
             sx={{
-              backgroundColor:
-                location.pathname === item.path ? "#f0f0f0" : "inherit",
+              backgroundColor: location.pathname.startsWith(item.path)
+                ? "#f0f0f0"
+                : "inherit",
               borderRadius: "8px",
               mx: 1,
               mb: 1,
@@ -94,7 +86,6 @@ const Admin = () => {
           </ListItem>
         ))}
       </List>
-
       <List>
         <ListItem disablePadding>
           <ListItemButton>
@@ -151,7 +142,6 @@ const Admin = () => {
           sx={{
             "& .MuiDrawer-paper": {
               width: drawerWidth,
-              // padding: "20px",
               boxSizing: "border-box",
               backgroundColor: "#f9f9f9",
               borderRight: "1px solid #e0e0e0",
@@ -168,21 +158,26 @@ const Admin = () => {
           flexGrow: 1,
           width: { lg: `calc(100% - ${drawerWidth}px)` },
           backgroundColor: "#fafafa",
-          height: "calc(100vh - 56px)", // ✅ Fixed height calculation
+          height: "calc(100vh - 56px)",
           overflowY: "auto",
         }}
       >
         <Toolbar sx={{ minHeight: "56px" }} />
         <Routes>
-          <Route path="/" element={<AdminDashboard />} />
-          <Route path="/product/create" element={<CreateProductForm />} />
-          <Route path="/products" element={<ProductTable />} />
-          <Route path="/orders" element={<OrdersTable />} />
-          <Route path="/customers" element={<CustomersTable />} />
-        </Routes>
+  <Route path="/" element={<AdminDashboard />} />
+  <Route path="/product/create" element={<CreateProductForm />} />
+  <Route path="/products" element={<ProductTable />} />
+  <Route path="/orders" element={<OrdersTable />} />
+  <Route path="/customers" element={<CustomersTable />} />
+</Routes>
+
       </Box>
     </Box>
   );
 };
 
 export default Admin;
+
+{
+  /* <Route path="/" element={<AdminApproval/>} /> */
+}

@@ -26,7 +26,7 @@ const salesData = [
   },
   {
     stats: "12.5k",
-    title: "Customer",
+    title: "Customers",
     color: "#22CB5C",
     icon: <PersonOutlineIcon sx={{ fontSize: "1.75rem" }} />,
   },
@@ -81,10 +81,10 @@ const MonthlyOverview = () => {
         }
         subheader={
           <Typography variant="body2">
-            <Box component="span" sx={{ fontWeight: 600 }}>
+            <Box component="span" sx={{ fontWeight: 600 ,color:'text.primary'}}>
               Total 48.5% growth{" "}
             </Box>
-            this month
+            👍 this month
           </Typography>
         }
         titleTypographyProps={{
